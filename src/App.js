@@ -1,13 +1,23 @@
-import React ,{ useState} from 'react';
+import React ,{ useEffect, useState} from 'react';
 import "./Style.css"
 import { Plus ,Trash2 } from 'lucide-react';
 
+
+const getLocalItems = () => {
+  let list = localStorage.getItem("todo")
+
+  if(list){
+    return JSON.parse(localStorage.getItem("todo"));
+  }else{
+    return [];
+  }
+}
 
 function App() {
 
 
 const [InputText, setInputText] = useState("")
-const [ItemData, setItemData] = useState([])
+const [ItemData, setItemData] = useState(getLocalItems)
 
 
 const OnUpdate = (e) => {
@@ -27,11 +37,16 @@ else{
 const DelTem = (id) => {
 
    const UpdatedData = ItemData.filter((elem, ind)=>{
-    return ind != id;
+    return ind !== id;
    })
    setItemData(UpdatedData)
    
 }
+
+useEffect(() => {
+  localStorage.setItem("todo" , JSON.stringify(ItemData))
+}, [ItemData])
+
 
 
   return (
